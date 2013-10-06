@@ -24,6 +24,13 @@
 	 font-style: normal;
 }
 
+::selection {
+	background: #28B9F7; /* Safari */
+	}
+::-moz-selection {
+	background: #28B9F7; /* Firefox */
+}
+
 .img{
 	cursor: crosshair;
 	width: 100%;
@@ -219,11 +226,17 @@
 			display: none;
 
 			#textarea{
+				font-family: 'Lato-Reg';
+				color: #000;
+				font-size: 13pt;
 				text-align: center;
+				background-color: #e3e3e3;
 				position: absolute;
-				width: 100%;
+				left: 0;
+				right: 50px;
 				top: 0;
 				bottom: 40px;
+				overflow: scroll;
 			}
 		}
 	}

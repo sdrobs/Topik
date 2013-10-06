@@ -24,3 +24,20 @@ exports.newTopic = function(req,res){
 	})
 
 }
+
+exports.addNote = function(req,res){
+	console.log(req.body)
+	if(!req.body.id || !req.body.note)
+		return res.send(400,'Invalid Parameters')
+	
+	Topic.findOne({_id : req.body.id}).exec(function(err,topic){
+		if(err)
+			return res.send(500, "db query err: " + err)
+		topic.notes.push({text : req.body.note,indent:req.body.indent})
+		topic.save(function(err,topic){
+			if(err)
+				return res.send(500,"db save error")
+			return res.send(200,topic)
+		})
+	})
+}

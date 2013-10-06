@@ -122,6 +122,47 @@
         return false
     })
 
+    function addTopicHook(){
+        $('.topic-block').unbind('click')
+        $('.topic-block').click(function(e){
+            $('.text-actions').hide()
+            $('.img-actions').hide()
+            $('.link-actions').hide()
+
+            $.ajax({
+                type: 'GET',
+                url: '/route/topic',
+                data: {
+                    id : e.target.dataset.id
+                },
+                success: function(data) {
+                    rendify.render('.view-container','topic',function(){
+                        rendify.currentTopic = e.target.dataset.id
+
+                        $('.topic-notes').each(function(i,e){
+                            for(var i = 0; i < $(e).data('indent'); i++){
+                                $(e).css('font-size','-=4')
+                                $(e).find('i').css('font-size','-=2')
+                                $(e).css('padding-left','+=30px')
+                            }
+                        })
+
+                        $('.action-panel').animate({'width': '51px'},1000)
+
+                        $('.topic-notes').unbind('keyup')
+                        $('.topic-notes').keyup(function(){
+                            console.log('msg')
+                        })
+                    },data)
+                },
+                error: function(jqXHR) {
+                     console.log(jqXHR.responseText)
+                }
+            })
+        })
+    }
+    addTopicHook()
+
     $('.login-btn').click(function(e){
         if($('#email').val() === "email" && $('#password').val() === "password"){
             $('.login').slideDown(1000)
@@ -223,43 +264,6 @@
         return false
     })
 
-    $('.topic-block').click(function(e){
-        $('.text-actions').hide()
-        $('.img-actions').hide()
-        $('.link-actions').hide()
-
-        $.ajax({
-            type: 'GET',
-            url: '/route/topic',
-            data: {
-                id : e.target.dataset.id
-            },
-            success: function(data) {
-                rendify.render('.view-container','topic',function(){
-                    rendify.currentTopic = e.target.dataset.id
-
-                    $('.topic-notes').each(function(i,e){
-                        for(var i = 0; i < $(e).data('indent'); i++){
-                            $(e).css('font-size','-=4')
-                            $(e).find('i').css('font-size','-=2')
-                            $(e).css('padding-left','+=30px')
-                        }
-                    })
-
-                    $('.action-panel').animate({'width': '51px'},1000)
-
-                    $('.topic-notes').unbind('keyup')
-                    $('.topic-notes').keyup(function(){
-                        console.log('msg')
-                    })
-                },data)
-            },
-            error: function(jqXHR) {
-                 console.log(jqXHR.responseText)
-            }
-        })
-    })
-
     $('.add-topic').click(function(){
         if($('.new-topic').height() == 0)
             $('.new-topic').animate({'height':'70px'},1000)
@@ -272,7 +276,8 @@
                         title: $('#new-topic-input').val()
                     },
                     success: function(data) {
-                        $('.left-menu').prepend('<div class="topic-block" data.id='+ data.id +'>'+ data.title +'</div>') //have been sanitized by server already
+                        $('.left-bar').prepend('<div class="topic-block" data-id='+ data._id +'>'+ data.title +'</div>') //has been sanitized by server already
+                        addTopicHook()
                     },
                     error: function(jqXHR) {
                          console.log(jqXHR.responseText)
@@ -294,6 +299,15 @@
         $('.action-panel').animate({'width': $(window).width() - 220},1000)
     })
 
+    function getSelection() {
+        var html = "";
+        if (typeof window.getSelection != "undefined") {
+            var sel = window.getSelection();
+            var text = sel.extentNode.data.substring(sel.baseOffset,sel.extentOffset)
+            return text
+        }
+    }
+
     var globalTimeout
     $('#img-url').mousedown(function(){
         if($(this).val() == $(this).attr('value'))
@@ -307,6 +321,42 @@
             $('.img').show()
             //http://media.aadl.org/documents/large/ums/programs_19750329a_001.jpg
         },2000)
+    })
+
+    $('#textarea').mousedown(function(e){
+        var x = e.pageX
+        var y = e.pageY
+
+        $('#textarea').mouseup(function(ev){
+            $('#textarea').unbind('mouseup')
+            console.log('msg')
+            if(ev.pageX !== x || ev.pageY !== y){
+                var text = getSelection()
+                console.log(text)
+            }
+            else
+                return
+
+            var indent = 0
+            if(e.shiftKey)
+                indent = 1
+
+            $.ajax({
+                type: 'POST',
+                url: '/route/add_note',
+                data: {
+                    id: rendify.currentTopic,
+                    note: text,
+                    indent: indent
+                },
+                success: function(data) {
+                    //
+                },
+                error: function(jqXHR) {
+                     console.log(jqXHR.responseText)
+                }
+            })
+        })
     })
 
     root.rendify = rendify
