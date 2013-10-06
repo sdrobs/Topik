@@ -238,7 +238,7 @@
                         }
                     })
 
-                    $('.left-bar-actions').animate({'width': '50px'},1000)
+                    $('.action-panel').animate({'width': '51px'},1000)
                 },data)
             },
             error: function(jqXHR) {
@@ -272,7 +272,27 @@
     })
 
     $('#pichl').click(function(e){
+        console.log('msg1')
+        $('.action-panel').animate({'width': $(window).width() - 220},1000)
+    })
 
+    var globalTimeout
+    $('#img-url').mousedown(function(){
+        if($(this).val() == $(this).attr('value'))
+            $(this).val('')
+    }).keydown(function(){
+        if(globalTimeout){
+            clearInterval(globalTimeout)
+        }
+        globalTimeout = setTimeout(function(){
+            $('.img').attr('src',$('#img-url').val())
+            $('.img').show()
+            //http://media.aadl.org/documents/large/ums/programs_19750329a_001.jpg
+        },2000)
+    })
+
+    $('.topic-notes').keyup(function(){
+        console.log('msg')
     })
 
     root.rendify = rendify

@@ -27,6 +27,8 @@
 .img{
 	cursor: crosshair;
 	width: 100%;
+	position: relative;
+	display: none;
 }
 
 .home{
@@ -149,24 +151,62 @@
 		}
 	}
 
-	.left-bar-actions{
+	.action-panel{
+		background-color: #111;
 		position: absolute;
-		top: 70px;
 		left: 220px;
-		bottom: 0;
 		width: 0px;
-		background-color: #333;
-		border-left: 1px solid #999;
-		text-align: center;
-		padding-top: 10px;
+		top: 70px;
+		bottom: 0;
+		overflow: hidden;
 
-		i{
-			color: #e3e3e3;
-			font-size: 16pt;
-			cursor: pointer;
+		.left-bar-actions{
+			z-index: 2;
+			position: absolute;
+			top: 0px;
+			right: 0;
+			bottom: 0;
+			width: 50px;
+			background-color: #333;
+			border-left: 1px solid #999;
+			text-align: center;
+			padding-top: 10px;
 
-			&:hover{
-				color: #28B9F7;
+			i{
+				color: #e3e3e3;
+				font-size: 16pt;
+				cursor: pointer;
+
+				&:hover{
+					color: #28B9F7;
+				}
+			}
+		}
+
+		.img-actions{
+
+			.img-container{
+				overflow: hidden;
+				overflow-y: scroll;
+				position: absolute;
+				bottom: 40px;
+				top: 0px;
+				left: 0px;
+				right: 0px;
+			}
+
+			#img-url{
+				z-index: 1;
+				font-size: 14pt;
+				position: absolute;
+				bottom: 0;
+				width: 70%;
+				left: 50%;
+				margin-left: -35%;
+				height: 30px;
+				text-align: center;
+				font-family: 'Lato-Reg'
+
 			}
 		}
 	}

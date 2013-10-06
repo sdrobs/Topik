@@ -4,6 +4,8 @@ var request = require('request'),
 	nodecr = require('nodecr'),
 	async = require('async'),
 	request = require('request')
+
+var Topic = require('../models/topic').Topic
 /*
 	words = require('../static/assets/words.js'),
 	spell = require('spell')
@@ -62,6 +64,16 @@ exports.highlight = function(req,res){
 			})
 		}
 	],function(err,results){
-		return res.send(200,{text : text})
+		console.log(req.query.tid)
+		Topic.findOne({_id : req.query.tid}).exec(function(err,topic){
+			if(err)
+				return res.send(500,"db query err: " + err)
+			topic.notes.push({text : text, indent : req.query.indent})
+			topic.save(function(err,savedTopic){
+				if(err)
+					return res.send(500,'db save err: ' + err)
+				return res.send(200,{text : text})
+			})
+		})
 	})
 }
