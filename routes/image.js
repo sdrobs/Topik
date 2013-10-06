@@ -64,7 +64,9 @@ exports.highlight = function(req,res){
 			})
 		}
 	],function(err,results){
-		console.log(req.query.tid)
+		if(text == '0' || text === '')
+			return res.send(200,'')
+
 		Topic.findOne({_id : req.query.tid}).exec(function(err,topic){
 			if(err)
 				return res.send(500,"db query err: " + err)

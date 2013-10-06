@@ -190,6 +190,10 @@
             $('.hl').hide()
             $('.hl').removeAttr('style')
 
+            var indent = 0
+            if(e.shiftKey)
+                indent = 1
+
 
             var w = e.pageX - $('.img').offset().left - x
             var h = e.pageY - $('.img').offset().top - y
@@ -206,7 +210,7 @@
                     imgw: $(this).width(),
                     imgh: $(this).height(),
                     tid: rendify.currentTopic,
-                    indent: 0
+                    indent: indent
                 },
                 success: function(data) {
                     console.log(data.text)
@@ -220,6 +224,10 @@
     })
 
     $('.topic-block').click(function(e){
+        $('.text-actions').hide()
+        $('.img-actions').hide()
+        $('.link-actions').hide()
+
         $.ajax({
             type: 'GET',
             url: '/route/topic',
@@ -239,6 +247,11 @@
                     })
 
                     $('.action-panel').animate({'width': '51px'},1000)
+
+                    $('.topic-notes').unbind('keyup')
+                    $('.topic-notes').keyup(function(){
+                        console.log('msg')
+                    })
                 },data)
             },
             error: function(jqXHR) {
@@ -259,7 +272,7 @@
                         title: $('#new-topic-input').val()
                     },
                     success: function(data) {
-                        //
+                        $('.left-menu').prepend('<div class="topic-block" data.id='+ data.id +'>'+ data.title +'</div>') //have been sanitized by server already
                     },
                     error: function(jqXHR) {
                          console.log(jqXHR.responseText)
@@ -272,7 +285,12 @@
     })
 
     $('#pichl').click(function(e){
-        console.log('msg1')
+        $('.img-actions').show()
+        $('.action-panel').animate({'width': $(window).width() - 220},1000)
+    })
+
+    $('#text').click(function(e){
+        $('.text-actions').show()
         $('.action-panel').animate({'width': $(window).width() - 220},1000)
     })
 
@@ -289,10 +307,6 @@
             $('.img').show()
             //http://media.aadl.org/documents/large/ums/programs_19750329a_001.jpg
         },2000)
-    })
-
-    $('.topic-notes').keyup(function(){
-        console.log('msg')
     })
 
     root.rendify = rendify
