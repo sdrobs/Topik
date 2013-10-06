@@ -1,7 +1,8 @@
 var path = require('path'),
 	mongoose = require('mongoose')
 	Schema = mongoose.Schema,
-	ObjectId = Schema.ObjectId
+	ObjectId = Schema.ObjectId,
+	request = require('request')
 
 //models
 var Topic = require('../models/topic').Topic
@@ -41,4 +42,20 @@ exports.renderMain = function(req,res){
 	})
 }
 
-//return res.sendfile(path.resolve(__dirname,'./static/views/main.html'))
+exports.getArticle = function(req,res){
+	if(!req.query.url)
+		return res.send(500,'Invalid Parameters')
+
+	request(req.query.url, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			var article = ''
+
+			body.replace(/<p[^>]*>(.*?)<\/p>/g, function () {
+			    //arguments[0] is the entire match
+			    var sentence = arguments[1].replace(/<b>|<\/b>/g,"")
+			    article += sentence + '<br><br>'
+			})
+			return res.send(200,{text : article})
+		}
+	})
+}

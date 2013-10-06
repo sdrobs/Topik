@@ -96,6 +96,8 @@ async.series(
             app.get('/route/topic', TopicRoutes.getTopic)
             app.get('/route/imghighlight',ImageRoutes.highlight)
 
+            app.get('/route/article',Router.getArticle)
+
             app.post('/route/add_note',TopicRoutes.addNote)
 
             app.get('/view/:viewPath', Router.renderView)

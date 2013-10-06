@@ -299,6 +299,11 @@
         $('.action-panel').animate({'width': $(window).width() - 220},1000)
     })
 
+    $('#link').click(function(e){
+        $('.link-actions').show()
+        $('.action-panel').animate({'width': $(window).width() - 220},1000)
+    })
+
     function getSelection() {
         var html = "";
         if (typeof window.getSelection != "undefined") {
@@ -319,7 +324,31 @@
         globalTimeout = setTimeout(function(){
             $('.img').attr('src',$('#img-url').val())
             $('.img').show()
-            //http://media.aadl.org/documents/large/ums/programs_19750329a_001.jpg
+        },2000)
+    })
+
+    var pageGlobalTimeout
+    $('#page-url').mousedown(function(){
+        if($(this).val() == $(this).attr('value'))
+            $(this).val('')
+    }).keydown(function(){
+        if(pageGlobalTimeout){
+            clearInterval(pageGlobalTimeout)
+        }
+        pageGlobalTimeout = setTimeout(function(){
+            $.ajax({
+                type: 'GET',
+                url: '/route/article',
+                data: {
+                    url : $('#page-url').val()
+                },
+                success: function(data) {
+                    $('#page-text').html(data.text)
+                },
+                error: function(jqXHR) {
+                     console.log(jqXHR.responseText)
+                }
+            })
         },2000)
     })
 
@@ -329,6 +358,42 @@
 
         $('#textarea').mouseup(function(ev){
             $('#textarea').unbind('mouseup')
+            console.log('msg')
+            if(ev.pageX !== x || ev.pageY !== y){
+                var text = getSelection()
+                console.log(text)
+            }
+            else
+                return
+
+            var indent = 0
+            if(e.shiftKey)
+                indent = 1
+
+            $.ajax({
+                type: 'POST',
+                url: '/route/add_note',
+                data: {
+                    id: rendify.currentTopic,
+                    note: text,
+                    indent: indent
+                },
+                success: function(data) {
+                    //
+                },
+                error: function(jqXHR) {
+                     console.log(jqXHR.responseText)
+                }
+            })
+        })
+    })
+
+    $('#page-text').mousedown(function(e){
+        var x = e.pageX
+        var y = e.pageY
+
+        $('#page-text').mouseup(function(ev){
+            $('#page-text').unbind('mouseup')
             console.log('msg')
             if(ev.pageX !== x || ev.pageY !== y){
                 var text = getSelection()
