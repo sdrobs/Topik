@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <title>Topik</title>
+        <link rel="stylesheet" href="/app/styles/main.css">
+        <script data-main="/app/js/main" src="/app/js/plugins/require.js"></script>
+    </head>
+</html>
+<body>
+	<div class="main">
+		<div class="top-bar">
+			Topik
+		</div>
+		<div class="left-bar">
+			{{#topics}}
+				<div class="topic-block" data-id="{{_id}}">
+					{{title}}
+				</div>
+			{{/topics}}
+			<div class="new-topic">
+				<div class="topic-box">
+					Enter Your Topic
+					<input id="new-topic-input">
+				</div>
+			</div>
+			<div class="add-topic">
+				<i class="icon-plus-sign"></i>
+			</div>
+		</div>
+		<div class="left-bar-actions">
+			<i class="icon-picture" id="pichl"></i><br><br>
+			<i class="icon-file" id="article"></i><br><br>
+			<i class="icon-text-height" id="text"></i>
+
+		</div>
+		<div class="view-container">
+			<div class="add-overlay">
+			</div>
+
+			<div style="display: none;">
+				<img  class="img" src="http://media.aadl.org/documents/large/ums/programs_19750329a_001.jpg">
+			</div>
+		</div>
+
+		<div class="hl">
+		</div>
+	</div>
+</body>
